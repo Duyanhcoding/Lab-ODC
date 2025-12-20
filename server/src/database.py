@@ -1,21 +1,19 @@
 import os
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker
 
-# Read connection URL from environment with a sensible default for local dev
-# Format: postgresql://username:password@host:port/dbname
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:admin@localhost:5432/labodc")
+# Format example: postgresql+psycopg2://user:pass@host:port/dbname
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "postgresql+psycopg2://postgres:admin@localhost:5432/labodc")
+SQL_ECHO = os.getenv("SQL_ECHO", "False").lower() in ("1", "true", "yes")
 
-# Create engine and session factory
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=SQL_ECHO, pool_pre_ping=True, future=True)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, future=True)
 Base = declarative_base()
 
 
 def init_db():
-	"""Create database tables. Call this at application startup."""
-	Base.metadata.create_all(bind=engine)
+    """Create database tables for development. Use Alembic for real migrations."""
+    Base.metadata.create_all(bind=engine)
 
 
 __all__ = ["engine", "SessionLocal", "Base", "init_db"]

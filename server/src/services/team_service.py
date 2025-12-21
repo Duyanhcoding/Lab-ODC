@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from src.infrastructure.repositories import team_repository
-from src.schemas.team_schema import TeamCreate, TeamMemberCreate
+from infrastructure.repositories import team_repository
+from api.schemas.team_schema import TeamCreate, TeamMemberCreate
 
 def create_new_team(db: Session, team: TeamCreate):
     return team_repository.create_team(db, team)

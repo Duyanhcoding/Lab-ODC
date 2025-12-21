@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from src.domain.models.team import Team, TeamMember
-from src.schemas.team_schema import TeamCreate, TeamMemberCreate
+from domain.models.team import Team, TeamMember
+from api.schemas.team_schema import TeamCreate, TeamMemberCreate
 
 def create_team(db: Session, team: TeamCreate):
     db_team = Team(name=team.name, project_id=team.project_id)

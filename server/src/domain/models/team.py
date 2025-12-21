@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Enum, Float
 from sqlalchemy.orm import relationship
 import enum
-from src.database import Base
+from database import Base
 
 class TeamRole(str, enum.Enum):
     LEADER = "LEADER"

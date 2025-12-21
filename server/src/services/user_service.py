@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from src.infrastructure.repositories import user_repository
-from src.schemas.user_schema import UserCreate
+from infrastructure.repositories import user_repository
+from api.schemas.user_schema import UserCreate
 
 def register_new_user(db: Session, user_data: UserCreate):
     # 1. Kiểm tra user tồn tại chưa

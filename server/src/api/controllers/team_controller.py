@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from src.database import get_db
-from src.schemas.team_schema import TeamCreate, TeamResponse, TeamMemberCreate
-from src.services import team_service
+from database import get_db
+from api.schemas.team_schema import TeamCreate, TeamResponse, TeamMemberCreate
+from services import team_service
 
 router = APIRouter()
 

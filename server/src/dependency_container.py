@@ -1,105 +1,31 @@
-"""Dependency container và helpers cho ứng dụng
+# src/dependency_container.py
+from sqlalchemy.orm import Session
+from infrastructure.repositories import user_repository, team_repository, payment_repository
+from services import user_service, team_service, payment_service
 
-Chức năng:
-- Cung cấp context manager `get_db_session()` để lấy SQLAlchemy session
-- Hàm `init_application_db()` để gọi `init_db()` tạo bảng (dev only)
-- `RepositoryContainer` chứa các repository được lazy-initialized
-
-Lưu ý: KHÔNG sửa file `database.py` hay `config.py` theo yêu cầu.
-"""
-from contextlib import contextmanager
-from typing import Optional
-
-from database import SessionLocal, init_db
-
-
-def init_application_db() -> None:
-    """Khởi tạo (create_all) các bảng trong DB (dùng cho dev).
-    Gọi hàm này lúc startup nếu cần đảm bảo bảng đã được tạo.
+class DependencyContainer:
     """
-    init_db()
-
-
-@contextmanager
-def get_db_session():
-    """Context manager để cung cấp SQLAlchemy session và đảm bảo commit/rollback/close.
-
-    Usage:
-        with get_db_session() as db:
-            # use db (Session)
+    Lớp này dùng để quản lý việc gọi các service.
+    Vì bạn dùng FastAPI và inject DB qua Depends(get_db), 
+    nên container này sẽ giúp gom nhóm các logic lại.
     """
-    db = SessionLocal()
-    try:
-        yield db
-        db.commit()
-    except Exception:
-        db.rollback()
-        raise
-    finally:
-        db.close()
+    
+    def __init__(self, db: Session):
+        self.db = db
 
+    # --- USER ---
+    def get_user_service(self):
+        return user_service
 
-class RepositoryContainer:
-    """Container để khởi tạo các repository lazily. Sử dụng khi cần truyền nhiều repo.
+    # --- TEAM ---
+    def get_team_service(self):
+        return team_service
 
-    Ví dụ:
-        with get_db_session() as db:
-            container = RepositoryContainer(db)
-            user_repo = container.user
-    """
+    # --- PAYMENT & FUND (Quy tắc 70/20/10) ---
+    def get_payment_service(self):
+        # Service này xử lý logic chia tiền LabOdc
+        return payment_service
 
-    def __init__(self, db_session):
-        self.db = db_session
-        self._user = None
-        self._project = None
-        self._team = None
-        self._fund = None
-        self._report = None
-
-    @property
-    def user(self):
-        if self._user is None:
-            from infrastructure.repositorties.user_repository import UserRepository
-
-            self._user = UserRepository(self.db)
-        return self._user
-
-    @property
-    def project(self):
-        if self._project is None:
-            from infrastructure.repositorties.project_repository import ProjectRepository
-
-            self._project = ProjectRepository(self.db)
-        return self._project
-
-    @property
-    def team(self):
-        if self._team is None:
-            from infrastructure.repositorties.team_repository import TeamRepository
-
-            self._team = TeamRepository(self.db)
-        return self._team
-
-    @property
-    def fund(self):
-        if self._fund is None:
-            from infrastructure.repositorties.fund_repository import FundRepository
-
-            self._fund = FundRepository(self.db)
-        return self._fund
-
-    @property
-    def report(self):
-        if self._report is None:
-            from infrastructure.repositorties.report_repository import ReportRepository
-
-            self._report = ReportRepository(self.db)
-        return self._report
-
-
-def get_repository_container(db_session) -> RepositoryContainer:
-    """Helper để tạo RepositoryContainer"""
-    return RepositoryContainer(db_session)
-
-
-__all__ = ["get_db_session", "init_application_db", "RepositoryContainer", "get_repository_container"]
+# Hàm helper để khởi tạo nhanh trong controller
+def get_container(db: Session):
+    return DependencyContainer(db)

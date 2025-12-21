@@ -1,3 +1,4 @@
+# src/config.py
 import os
 from dotenv import load_dotenv
 
@@ -12,6 +13,7 @@ class Settings:
 
     @property
     def DATABASE_URL(self):
+        # Đảm bảo các biến môi trường không bị None
         return (
             f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASSWORD}"
             f"@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"

@@ -1,28 +1,24 @@
-from sqlalchemy import create_engine, text
-from sqlalchemy.orm import declarative_base, sessionmaker
-from config import settings
+# src/database.py
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, declarative_base
+from src.config import settings
 
-
-Base = declarative_base()
-
-
+# Tạo engine kết nối
 engine = create_engine(
     settings.DATABASE_URL,
-    echo=True,          # In SQL ra console để học
+    echo=True, # In SQL ra log để debug
     pool_pre_ping=True
 )
 
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-SessionLocal = sessionmaker(
-    bind=engine,
-    autocommit=False,
-    autoflush=False
-)
+# Base class cho các Models kế thừa
+Base = declarative_base()
 
-def test_connection():
+# Dependency để lấy DB session (dùng cho API sau này)
+def get_db():
+    db = SessionLocal()
     try:
-        with engine.connect() as conn:
-            result = conn.execute(text("SELECT 1"))
-            print("✅ Kết nối PostgreSQL thành công:", result.scalar())
-    except Exception as e:
-        print("❌ Kết nối thất bại:", e)
+        yield db
+    finally:
+        db.close()

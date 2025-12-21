@@ -1,44 +1,31 @@
-"""Mô-đun: Team model
-Quản lý nhóm (team), mối quan hệ nhiều-nhiều với users và projects.
-"""
-
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, Enum, Float
 from sqlalchemy.orm import relationship
-from database import Base
-import datetime
+import enum
+from src.database import Base
 
-
-# Bảng liên kết team <-> user
-team_members = Table(
-    "team_members",
-    Base.metadata,
-    Column("team_id", Integer, ForeignKey("teams.id"), primary_key=True),
-    Column("user_id", Integer, ForeignKey("users.id"), primary_key=True),
-    Column("role", String(50), default="MEMBER"),
-    Column("joined_at", DateTime, default=datetime.datetime.utcnow),
-)
-
-# Bảng liên kết project <-> team
-project_teams = Table(
-    "project_teams",
-    Base.metadata,
-    Column("project_id", Integer, ForeignKey("projects.id"), primary_key=True),
-    Column("team_id", Integer, ForeignKey("teams.id"), primary_key=True),
-    Column("role", String(50), default="SUPPORT"),
-    Column("assigned_at", DateTime, default=datetime.datetime.utcnow),
-)
-
+class TeamRole(str, enum.Enum):
+    LEADER = "LEADER"
+    MEMBER = "MEMBER"
+    MENTOR = "MENTOR"
 
 class Team(Base):
     __tablename__ = "teams"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(255), nullable=False)
-    description = Column(Text)
-    lead_id = Column(Integer, ForeignKey("users.id"), nullable=True)
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    name = Column(String, nullable=False)
+    project_id = Column(Integer, nullable=True) # Link tới Project nếu có
+    # Ví cho team (tổng tiền team nhận được)
+    wallet_balance = Column(Float, default=0.0) 
 
-    # Relationship tới users (members) và projects
-    members = relationship("User", secondary=team_members, backref="teams")
-    projects = relationship("Project", secondary=project_teams, backref="teams")
+    members = relationship("TeamMember", back_populates="team")
 
+class TeamMember(Base):
+    __tablename__ = "team_members"
+
+    id = Column(Integer, primary_key=True, index=True)
+    team_id = Column(Integer, ForeignKey("teams.id"))
+    user_id = Column(Integer, ForeignKey("users.id"))
+    role = Column(String, default=TeamRole.MEMBER) # Lưu dạng string cho đơn giản
+
+    team = relationship("Team", back_populates="members")
+    # user = relationship("User") # Uncomment nếu muốn link ngược lại user

@@ -1,0 +1,8 @@
+# Project Python dependencies
+# Add psycopg2-binary for PostgreSQL support
+psycopg2-binary>=2.9
+SQLAlchemy>=1.4
+
+# API framework
+fastapi>=0.95
+uvicorn[standard]>=0.22

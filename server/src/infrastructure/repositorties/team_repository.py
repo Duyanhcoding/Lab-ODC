@@ -1,3 +1,4 @@
+# Repository quản lý Team và các liên kết (members, projects)
 from sqlalchemy.orm import Session
 from domain.models.team import Team, team_members, project_teams
 from domain.models.user import User
@@ -7,7 +8,9 @@ from sqlalchemy import select, insert, delete
 
 class TeamRepository:
     def __init__(self, db: Session):
+        # db: SQLAlchemy Session
         self.db = db
+
 
     def get_team_by_id(self, team_id: int):
         return self.db.query(Team).filter(Team.id == team_id).first()

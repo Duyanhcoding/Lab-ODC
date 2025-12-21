@@ -1,9 +1,14 @@
+"""Mô-đun: Team model
+Quản lý nhóm (team), mối quan hệ nhiều-nhiều với users và projects.
+"""
+
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table, DateTime
 from sqlalchemy.orm import relationship
 from database import Base
 import datetime
 
 
+# Bảng liên kết team <-> user
 team_members = Table(
     "team_members",
     Base.metadata,
@@ -13,6 +18,7 @@ team_members = Table(
     Column("joined_at", DateTime, default=datetime.datetime.utcnow),
 )
 
+# Bảng liên kết project <-> team
 project_teams = Table(
     "project_teams",
     Base.metadata,
@@ -32,5 +38,7 @@ class Team(Base):
     lead_id = Column(Integer, ForeignKey("users.id"), nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
+    # Relationship tới users (members) và projects
     members = relationship("User", secondary=team_members, backref="teams")
     projects = relationship("Project", secondary=project_teams, backref="teams")
+

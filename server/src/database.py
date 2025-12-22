@@ -1,17 +1,16 @@
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import declarative_base, sessionmaker
-from config import settings
-
 
 Base = declarative_base()
 
+# Hardcode DATABASE_URL để chạy chắc chắn (bỏ qua config và .env)
+DATABASE_URL = "postgresql://postgres:150306@localhost:5432/labodc_db"
 
 engine = create_engine(
-    settings.DATABASE_URL,
-    echo=True,          # In SQL ra console để học
+    DATABASE_URL,
+    echo=True,
     pool_pre_ping=True
 )
-
 
 SessionLocal = sessionmaker(
     bind=engine,
@@ -26,3 +25,8 @@ def test_connection():
             print("✅ Kết nối PostgreSQL thành công:", result.scalar())
     except Exception as e:
         print("❌ Kết nối thất bại:", e)
+
+def init_db():
+    """Tạo tất cả bảng nếu chưa tồn tại"""
+    Base.metadata.create_all(bind=engine)
+    print("✅ Đã tạo tất cả bảng trong database")

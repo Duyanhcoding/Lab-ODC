@@ -109,7 +109,7 @@ pip install -r requirements.txt
 Tạo file `.env` trong thư mục `backend/`:
 
 ```env
-DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5432/labodc_db
+DATABASE_URL=postgresql://postgres:150306@localhost:5432/labodc_db
 ```
 
 ---

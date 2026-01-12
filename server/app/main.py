@@ -3,42 +3,41 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.database import Base, engine
 
-# IMPORT MODELS
+# models
 from app.models.user import User
 from app.models.project import Project
 from app.models.project_member import ProjectMember
 from app.models.payment import Payment
 from app.models.fund_distribution import FundDistribution
 
-# IMPORT ROUTERS (CHỈ IMPORT MODULE)
-from app.routers import auth_router, user_router, project_router, payment_router
+# routers
+from app.routers import auth_router, user_router, project_router, payment_router, talent_router
 
-app = FastAPI(
-    title="LabODC API",
-    version="1.0.0"
-)
+app = FastAPI(title="LabODC API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:5173",      # giữ lại để dev local
-        "http://127.0.0.1:5173",
+        "http://localhost:5173"
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
-# CREATE TABLES
 @app.on_event("startup")
 def startup():
     Base.metadata.create_all(bind=engine)
+    print("✅ Database ready")
 
-# INCLUDE ROUTERS (CHỈ .router)
+# IMPORTANT: NO PREFIX HERE
 app.include_router(auth_router.router)
 app.include_router(user_router.router)
 app.include_router(project_router.router)
 app.include_router(payment_router.router)
+app.include_router(talent_router.router)
+
+@app.get("/")
+def root():
+    return {"message": "LabODC API running"}

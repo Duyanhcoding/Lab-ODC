@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, Float, String, ForeignKey
+from sqlalchemy.orm import relationship
 from app.core.database import Base
 
 class Payment(Base):
@@ -12,4 +13,6 @@ class Payment(Base):
     mentor_amount = Column(Float, nullable=False)
     lab_amount = Column(Float, nullable=False)
 
-    status = Column(String, default="pending", nullable=False)
+    status = Column(String, nullable=False)
+
+    project = relationship("Project")

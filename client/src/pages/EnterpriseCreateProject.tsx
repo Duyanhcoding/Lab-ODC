@@ -4,26 +4,34 @@ import api from "../api/axios";
 import "../styles/enterprise.css";
 
 export default function EnterpriseCreateProject() {
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate();
-
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
+
     setLoading(true);
 
     try {
       await api.post("/projects", {
         title,
-        description
+        description,
+        status: "draft"
       });
 
-      navigate("/posts");
-    } catch (err) {
-      console.error(err);
-      alert("Create project failed");
+      // reset form
+      setTitle("");
+      setDescription("");
+
+      // quay về danh sách project enterprise
+      navigate("/enterprise/projects");
+    } catch (error) {
+      console.error("Create project error:", error);
+      alert("❌ Failed to create project. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -37,25 +45,30 @@ export default function EnterpriseCreateProject() {
         <label>
           Project Title
           <input
+            type="text"
             value={title}
-            onChange={e => setTitle(e.target.value)}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="e.g. AI Resume Screening System"
             required
-            placeholder="e.g. AI Resume Scanner"
           />
         </label>
 
         <label>
-          Description
+          Project Description
           <textarea
             value={description}
-            onChange={e => setDescription(e.target.value)}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Describe objectives, scope, expected outcomes..."
             required
-            placeholder="Describe your project requirements..."
           />
         </label>
 
-        <button className="btn-primary" disabled={loading}>
-          {loading ? "Creating..." : "Create Project"}
+        <button
+          className="btn-primary"
+          type="submit"
+          disabled={loading}
+        >
+          {loading ? "Creating project..." : "Create Project"}
         </button>
       </form>
     </div>

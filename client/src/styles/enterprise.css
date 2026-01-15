@@ -398,3 +398,14 @@
 .btn-primary:hover {
   opacity: .9;
 }
+
+/* PAGE VISIBILITY CONTROL */
+/* dùng để ẩn/hiện nội dung*/
+
+.page {
+  display: block;
+}
+
+.page.hidden {
+  display: none;
+}

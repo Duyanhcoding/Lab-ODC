@@ -9,12 +9,14 @@ import Admin from "./pages/Admin";
 import AdminProjects from "./pages/AdminProjects";
 import AdminUsers from "./pages/AdminUsers";
 import AdminPayments from "./pages/AdminPayments";
+
 import EnterpriseLayout from "./pages/EnterpriseLayout";
-import EnterpriseCreateProject from "./pages/EnterpriseCreateProject";  
+import EnterpriseCreateProject from "./pages/EnterpriseCreateProject";
 
 function App() {
   return (
     <Routes>
+      {/* LOGIN */}
       <Route path="/" element={<Login />} />
 
       {/* ADMIN */}
@@ -40,15 +42,11 @@ function App() {
           </ProtectedRoute>
         }
       >
+        <Route index element={<EnterpriseDashboard />} />
         <Route path="dashboard" element={<EnterpriseDashboard />} />
         <Route path="payments" element={<EnterprisePayments />} />
-        <Route
-              path="/enterprise/projects/create"
-              element={<EnterpriseCreateProject />}
-/>
-
+        <Route path="projects/create" element={<EnterpriseCreateProject />} />
       </Route>
-
 
       {/* TALENT */}
       <Route

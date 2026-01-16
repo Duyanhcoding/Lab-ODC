@@ -5,12 +5,15 @@ export default function EnterpriseLayout() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  /**
+   * Check active menu item
+   */
   const isActive = (path: string) =>
     location.pathname.startsWith(path) ? "active" : "";
 
   return (
     <div className="enterprise-shell">
-      {/* SIDEBAR */}
+      {/* ===== SIDEBAR ===== */}
       <aside className="enterprise-sidebar">
         <h2 className="logo">LabODC</h2>
 
@@ -28,10 +31,17 @@ export default function EnterpriseLayout() {
           >
             💳 Payments
           </div>
+
+          <div
+            className={`nav-item ${isActive("/enterprise/profile")}`}
+            onClick={() => navigate("/enterprise/profile")}
+          >
+            👤 Profile
+          </div>
         </nav>
       </aside>
 
-      {/* MAIN */}
+      {/* ===== MAIN CONTENT ===== */}
       <main className="enterprise-main">
         <Outlet />
       </main>

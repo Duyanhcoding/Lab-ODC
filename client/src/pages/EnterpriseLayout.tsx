@@ -6,16 +6,17 @@ export default function EnterpriseLayout() {
   const location = useLocation();
 
   /**
-   * Check active menu item
+   * Determine active menu item based on current path
    */
-  const isActive = (path: string) =>
-    location.pathname.startsWith(path) ? "active" : "";
+  const isActive = (path: string) => {
+    return location.pathname.startsWith(path) ? "active" : "";
+  };
 
   return (
     <div className="enterprise-shell">
       {/* ===== SIDEBAR ===== */}
       <aside className="enterprise-sidebar">
-        <h2 className="logo">LabODC</h2>
+        <div className="logo">LabOdc</div>
 
         <nav>
           <div
@@ -41,7 +42,7 @@ export default function EnterpriseLayout() {
         </nav>
       </aside>
 
-      {/* ===== MAIN CONTENT ===== */}
+      {/* ===== MAIN CONTENT (ROUTE OUTLET) ===== */}
       <main className="enterprise-main">
         <Outlet />
       </main>

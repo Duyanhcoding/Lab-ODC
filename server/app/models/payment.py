@@ -23,6 +23,7 @@ class Payment(Base):
     lab_amount = Column(Float)
 
     is_hybrid = Column(Boolean, default=False)
+    project = relationship("Project", backref="payments")
 
 
 
@@ -39,4 +40,3 @@ class FundDistribution(Base):
     transferred_at = Column(DateTime)
 
     payment = relationship("Payment", backref="distributions")
-

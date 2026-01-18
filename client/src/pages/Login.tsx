@@ -1,53 +1,61 @@
-import { useState } from "react";
-import api from "../api/axios";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { useAuth } from "../auth/AuthContext";
 import "../styles/login.css";
-
-type JwtPayload = {
-  role: "admin" | "enterprise" | "talent";
-};
+import "../styles/theme.css";
 
 export default function Login() {
+  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("talent"); // chỉ dùng khi register
+  const [error, setError] = useState("");
+
+  const { login, register } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
     try {
-      const formData = new URLSearchParams();
-      formData.append("username", email);
-      formData.append("password", password);
+      if (isLogin) {
+        await login(email, password);
+      } else {
+        await register({ email, password, role });
+      }
 
-      const res = await api.post("/auth/login", formData, {
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      });
+      // 🔥 lấy user từ localStorage (AuthContext đã lưu sẵn)
+      const u = JSON.parse(localStorage.getItem("user")!);
 
-      const token = res.data.access_token;
-      localStorage.setItem("token", token);
-
-      const payload = jwtDecode<JwtPayload>(token);
-
-      if (payload.role === "admin") navigate("/admin/projects");
-      else if (payload.role === "enterprise") navigate("/enterprise");
-      else if (payload.role === "talent") navigate("/talent");
-      else alert("Unknown role");
-
-    } catch (err) {
-      alert("Login failed");
-      console.error(err);
+      if (u.role === "admin") {
+        navigate("/admin/dashboard");
+      } else if (u.role === "enterprise") {
+        navigate("/enterprise/dashboard");
+      } else if (u.role === "mentor") {
+        navigate("/mentor/dashboard");
+      } else {
+        navigate("/talent/dashboard");
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.detail || "Authentication failed");
+      console.error("Auth error:", err);
     }
   };
 
   return (
     <div className="login-container">
-      <div className="login-card">
-        <h1>LabODC</h1>
+      <h1>{isLogin ? "LabODC" : "LabODC"}</h1>
 
+      {error && <div className="error-message">{error}</div>}
+
+      <form onSubmit={handleSubmit}>
         <input
+          type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
 
         <input
@@ -55,10 +63,31 @@ export default function Login() {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
 
-        <button onClick={handleLogin}>Login</button>
-      </div>
+        {!isLogin && (
+          <>
+           
+
+            <select value={role} onChange={(e) => setRole(e.target.value)}>
+              <option value="talent">Talent</option>
+              <option value="mentor">Mentor</option>
+              <option value="enterprise">Enterprise</option>
+              <option value="admin">Admin</option>
+            </select>
+          </>
+        )}
+
+        <button type="submit">{isLogin ? "Login" : "Register"}</button>
+      </form>
+
+      <p className="toggle-auth">
+        {isLogin ? "Don't have an account? " : "Already have an account? "}
+        <span onClick={() => setIsLogin(!isLogin)}>
+          {isLogin ? "Register" : "Login"}
+        </span>
+      </p>
     </div>
   );
 }

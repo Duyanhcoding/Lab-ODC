@@ -1,64 +1,193 @@
-import { Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Talent from "./pages/Talent";
-import EnterpriseDashboard from "./pages/EnterpriseDashboard";
-import EnterprisePayments from "./pages/EnterprisePayments";
-import ProtectedRoute from "./auth/ProtectedRoute";
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './auth/AuthContext';
+import { ProtectedRoute } from './auth/ProtectedRoute';
+import Unauthorized from './pages/Unauthorized';
 
-import Admin from "./pages/Admin";
-import AdminProjects from "./pages/AdminProjects";
-import AdminUsers from "./pages/AdminUsers";
-import AdminPayments from "./pages/AdminPayments";
+import Login from './pages/Login';
 
-import EnterpriseLayout from "./pages/EnterpriseLayout";
-import EnterpriseCreateProject from "./pages/EnterpriseCreateProject";
+// ===== ADMIN =====
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminProjects from './pages/admin/AdminProjects';
+import AdminUsers from './pages/admin/AdminUsers';
+import AdminPayments from './pages/admin/AdminPayments';
 
-function App() {
+// ===== ENTERPRISE =====
+import EnterpriseDashboard from './pages/enterprise/EnterpriseDashboard';
+import EnterpriseCreateProject from './pages/enterprise/EnterpriseCreateProject';
+import EnterprisePayments from './pages/enterprise/EnterprisePayments';
+
+// ===== TALENT =====
+import TalentDashboard from './pages/talent/TalentDashboard';
+import TalentProjects from './pages/talent/TalentProjects';
+import TalentProfile from './pages/talent/TalentProfile';
+
+// ===== MENTOR =====
+import MentorDashboard from './pages/mentor/MentorDashboard';
+import MentorProjects from './pages/mentor/MentorProjects';
+import MentorReports from './pages/mentor/MentorReports';
+
+import PageTemplate from "./components/PageTemplate";
+
+/* =========================
+   Role Redirect Handler
+========================= */
+function RoleRedirect() {
+  const { user } = useAuth();
+
+  if (!user) return <Navigate to="/login" />;
+
+  if (user.role === "admin") return <Navigate to="/admin/dashboard" />;
+  if (user.role === "enterprise") return <Navigate to="/enterprise/dashboard" />;
+  if (user.role === "mentor") return <Navigate to="/mentor/dashboard" />;
+  return <Navigate to="/talent/dashboard" />;
+}
+
+/* =========================
+   Routes
+========================= */
+function AppRoutes() {
   return (
     <Routes>
-      {/* LOGIN */}
-      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<RoleRedirect />} />
+      <Route path="/unauthorized" element={<Unauthorized />} />
 
-      {/* ADMIN */}
-      <Route
-        path="/admin"
-        element={
-          <ProtectedRoute roles={["admin"]}>
-            <Admin />
-          </ProtectedRoute>
-        }
-      >
-        <Route path="projects" element={<AdminProjects />} />
-        <Route path="users" element={<AdminUsers />} />
-        <Route path="payments" element={<AdminPayments />} />
+      {/* ==== ALL LOGGED IN USERS ==== */}
+      <Route element={<PageTemplate />}>
+
+        {/* ===== ADMIN ===== */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/projects"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminProjects />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminUsers />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/payments"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminPayments />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ===== ENTERPRISE ===== */}
+        <Route
+          path="/enterprise/dashboard"
+          element={
+            <ProtectedRoute allowedRoles={['enterprise']}>
+              <EnterpriseDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/enterprise/create-project"
+          element={
+            <ProtectedRoute allowedRoles={['enterprise']}>
+              <EnterpriseCreateProject />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/enterprise/payments"
+          element={
+            <ProtectedRoute allowedRoles={['enterprise']}>
+              <EnterprisePayments />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ===== TALENT ===== */}
+        <Route
+          path="/talent/dashboard"
+          element={
+            <ProtectedRoute allowedRoles={['talent']}>
+              <TalentDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/talent/projects"
+          element={
+            <ProtectedRoute allowedRoles={['talent']}>
+              <TalentProjects />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/talent/profile"
+          element={
+            <ProtectedRoute allowedRoles={['talent']}>
+              <TalentProfile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ===== MENTOR ===== */}
+        <Route
+          path="/mentor/dashboard"
+          element={
+            <ProtectedRoute allowedRoles={['mentor']}>
+              <MentorDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/mentor/projects"
+          element={
+            <ProtectedRoute allowedRoles={['mentor']}>
+              <MentorProjects />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/mentor/reports"
+          element={
+            <ProtectedRoute allowedRoles={['mentor']}>
+              <MentorReports />
+            </ProtectedRoute>
+          }
+        />
+
       </Route>
-
-      {/* ENTERPRISE */}
-      <Route
-        path="/enterprise"
-        element={
-          <ProtectedRoute roles={["enterprise"]}>
-            <EnterpriseLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<EnterpriseDashboard />} />
-        <Route path="dashboard" element={<EnterpriseDashboard />} />
-        <Route path="payments" element={<EnterprisePayments />} />
-        <Route path="projects/create" element={<EnterpriseCreateProject />} />
-      </Route>
-
-      {/* TALENT */}
-      <Route
-        path="/talent"
-        element={
-          <ProtectedRoute roles={["talent"]}>
-            <Talent />
-          </ProtectedRoute>
-        }
-      />
     </Routes>
   );
 }
 
-export default App;
+/* =========================
+   Root App
+========================= */
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppRoutes />
+    </AuthProvider>
+  );
+}

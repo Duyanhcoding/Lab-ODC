@@ -22,7 +22,6 @@ export const authAPI = {
     }
   },
 
-
   login: async (data: { email: string; password: string }) => {
   const form = new URLSearchParams();
   form.append('username', data.email);
@@ -44,5 +43,12 @@ export const authAPI = {
       });
       throw error;
   }
-}
+},
+  forgotPassword: async (email: string) => {
+    return await api.post('/auth/forgot-password', { email });
+  },
+
+  resetPassword: async (data: { token: string; password: any }) => {
+    return await api.post('/auth/reset-password', data);
+  }
 };

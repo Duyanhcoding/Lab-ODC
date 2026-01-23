@@ -27,6 +27,8 @@ import MentorProjects from './pages/mentor/MentorProjects';
 import MentorReports from './pages/mentor/MentorReports';
 
 import PageTemplate from "./components/PageTemplate";
+//forgotpassword
+import ForgotPassword from './pages/forgot_password';
 
 /* =========================
    Role Redirect Handler
@@ -49,6 +51,7 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword/>}/>
       <Route path="/" element={<RoleRedirect />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
 

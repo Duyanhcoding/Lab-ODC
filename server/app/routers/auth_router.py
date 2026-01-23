@@ -36,11 +36,24 @@ def login(
         "access_token": token,
         "token_type": "bearer"
     }
+# auth_router.py
 
-@router.get("/me")
-def me(user = Depends(get_current_user)):
-    return {
-        "id": user.id,
-        "email": user.email,
-        "role": user.role
-    }
+@router.post("/forgot-password")
+async def forgot_password(payload: dict, db: Session = Depends(get_db)):
+    email = payload.get("email")
+    user = db.query(user).filter(user.email == email).first()
+    
+    if not user:
+        return {"message": "link be sent"}
+
+    # Tạo token tạm thời (15 phút)
+    reset_token = AuthService.create_token(user) 
+    
+    print(f"DEBUG: Link: http://localhost:3000/reset-password?token={reset_token}")
+    return {"message": "Email reset be sent"}
+
+@router.post("/reset-password")
+def reset_password(payload: dict, db: Session = Depends(get_db)):
+    token = payload.get("token")
+    new_password = payload.get("password")
+    return {"message": "password has been updated"}

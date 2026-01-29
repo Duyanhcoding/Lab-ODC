@@ -10,7 +10,7 @@ Backend được xây dựng nhằm:
 * Quản lý dữ liệu: người dùng, dự án, mentor, báo cáo.
 * Kết nối và thao tác với **PostgreSQL Database**.
 
-Phiên bản hiện tại là **Backend Skeleton** phục vụ mục đích học tập trong môn **Công nghệ Phần mềm** (sinh viên năm 2).
+Phiên bản hiện tại là **Backend Skeleton** phục vụ mục đích học tập trong môn **Công nghệ Phần mềm**.
 
 ---
 

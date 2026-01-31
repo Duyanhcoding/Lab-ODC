@@ -5,7 +5,7 @@ export const createTalentProfile = async (data: {
   bio: string;
 }) => {
   const res = await axios.post("/talent/profile", {
-    skills: data.skills,
+    skills: data.skills.split(",").map(s => s.trim()),
     bio: data.bio
   });
   return res.data;

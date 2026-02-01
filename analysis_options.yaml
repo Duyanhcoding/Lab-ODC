@@ -9,11 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  
-  # --- QUAN TRỌNG: Chữ http phải thẳng hàng với chữ flutter ---
   cupertino_icons: ^1.0.8
   http: ^1.2.0   
-  # -----------------------------------------------------------
 
 dev_dependencies:
   flutter_test:

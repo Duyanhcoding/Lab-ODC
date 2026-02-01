@@ -9,7 +9,7 @@ class MentorHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Không gian Mentor"),
+        title: const Text("Mentor"),
         backgroundColor: Colors.purple,
         foregroundColor: Colors.white,
         actions: [IconButton(onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginScreen())), icon: const Icon(Icons.logout))],
@@ -25,10 +25,10 @@ class MentorHomeScreen extends StatelessWidget {
             Expanded(
               child: ListView(
                 children: [
-                  _buildStudentItem("Nguyễn Văn A", "Dự án: App Mobile", 0.8),
-                  _buildStudentItem("Trần Thị B", "Dự án: Website Bán Hàng", 0.4),
-                  _buildStudentItem("Lê Văn C", "Dự án: AI Chatbot", 0.1),
-                  _buildStudentItem("Phạm Minh D", "Dự án: IoT Garden", 0.9),
+                  _buildStudentItem("Vi Minh Khang", "Dự án: App Mobile", 0.8),
+                  _buildStudentItem("Doan Quoc Huy", "Dự án: Website Bán Hàng", 0.4),
+                  _buildStudentItem("Tran Thai Hoc", "Dự án: AI Chatbot", 0.1),
+                  _buildStudentItem("Duy Anh", "Dự án: IoT Garden", 0.9),
                 ],
               ),
             )

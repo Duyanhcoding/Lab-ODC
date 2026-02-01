@@ -9,6 +9,7 @@ Backend được xây dựng nhằm:
 * Cung cấp **RESTful APIs** cho hệ thống LabOdc.
 * Quản lý dữ liệu: người dùng, dự án, mentor, báo cáo.
 * Kết nối và thao tác với **PostgreSQL Database**.
+* Phục vụ mục đích học tập
 
 Phiên bản hiện tại là **Backend Skeleton** phục vụ mục đích học tập trong môn **Công nghệ Phần mềm**.
 

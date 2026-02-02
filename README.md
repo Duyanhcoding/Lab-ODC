@@ -9,8 +9,9 @@ Backend được xây dựng nhằm:
 * Cung cấp **RESTful APIs** cho hệ thống LabOdc.
 * Quản lý dữ liệu: người dùng, dự án, mentor, báo cáo.
 * Kết nối và thao tác với **PostgreSQL Database**.
+* Phục vụ mục đích học tập
 
-Phiên bản hiện tại là **Backend Skeleton** phục vụ mục đích học tập trong môn **Công nghệ Phần mềm** (sinh viên năm 2).
+Phiên bản hiện tại là **Backend Skeleton** phục vụ mục đích học tập trong môn **Công nghệ Phần mềm**.
 
 ---
 
@@ -109,7 +110,7 @@ pip install -r requirements.txt
 Tạo file `.env` trong thư mục `backend/`:
 
 ```env
-DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5432/labodc_db
+DATABASE_URL=postgresql://postgres:150306@localhost:5432/labodc_db
 ```
 
 ---

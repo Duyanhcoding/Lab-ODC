@@ -1,0 +1,372 @@
+/* =========================================================
+   MENTOR UI – CLONE ENTERPRISE DESIGN
+========================================================= */
+
+.mentor-layout {
+  display: flex;
+  min-height: 100vh;
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  background: linear-gradient(180deg, #f7faff, #f3f6fb);
+}
+
+/* ================= SIDEBAR ================= */
+
+.mentor-layout .sidebar {
+  width: 260px;
+  background: linear-gradient(180deg, #061a33, #021024);
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.mentor-layout .logo {
+  font-size: 28px;
+  font-weight: 800;
+  color: #4fc3ff;
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+/* ================= MENU ================= */
+
+.mentor-layout nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mentor-layout .nav-item {
+  display: block;
+  padding: 14px 20px;
+  border-radius: 14px;
+  color: #dbeafe;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.25s ease;
+}
+
+.mentor-layout .nav-item:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.mentor-layout .nav-item.active {
+  background: linear-gradient(90deg, #2563eb, #38bdf8);
+  color: white;
+  box-shadow: 0 10px 30px rgba(37,99,235,0.35);
+}
+
+/* ================= MAIN ================= */
+
+.mentor-layout .admin-content {
+  flex: 1;
+  padding: 48px;
+  background: linear-gradient(180deg, #f7faff, #f3f6fb);
+}
+
+/* ================= HEADINGS ================= */
+
+.mentor-layout h1 {
+  font-size: 34px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 32px;
+}
+
+.mentor-layout h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+/* ================= STATS GRID ================= */
+
+.mentor-layout .stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-bottom: 40px;
+}
+
+.mentor-layout .stat-card {
+  background: white;
+  padding: 28px;
+  border-radius: 18px;
+  box-shadow: 0 15px 40px rgba(15,23,42,0.06);
+  position: relative;
+}
+
+.mentor-layout .stat-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #1f6fff, #4fc3ff);
+  opacity: 0.04;
+}
+
+.mentor-layout .stat-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #1e293b;
+  margin-bottom: 24px;
+}
+
+.mentor-layout .stat-card p {
+  font-size: 34px;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+/* ================= CARD ================= */
+
+.mentor-projects section,
+.mentor-reports form {
+  background: white;
+  padding: 32px;
+  border-radius: 18px;
+  box-shadow: 0 15px 40px rgba(15,23,42,0.06);
+  margin-bottom: 32px;
+}
+
+/* ================= FORM ================= */
+
+.mentor-layout input,
+.mentor-layout textarea,
+.mentor-layout select {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+}
+
+.mentor-layout input:focus,
+.mentor-layout textarea:focus,
+.mentor-layout select:focus {
+  border-color: #1f6fff;
+  box-shadow: 0 0 0 2px rgba(31,111,255,0.15);
+}
+
+/* ================= BUTTON ================= */
+
+.mentor-layout button {
+  background: linear-gradient(135deg, #1f6fff, #4fc3ff);
+  color: white;
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+.mentor-layout button:hover {
+  box-shadow: 0 12px 30px rgba(31,111,255,0.35);
+  transform: translateY(-1px);
+}
+
+/* ================= PROJECT LIST ================= */
+
+.projects-list {
+  display: flex;
+  flex-direction: column; /* xếp dọc */
+  gap: 24px;              /* khoảng cách giữa 2 ô */
+}
+
+.project-card {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================================
+   MY PROJECTS – TABLE-LIKE UI (CSS ONLY, NO JSX CHANGE)
+========================================================= */
+
+.projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* mỗi project = 1 row */
+.project-card {
+  display: grid;
+  grid-template-columns: 3fr 2fr 1fr;
+  align-items: center;
+
+  background: #ffffff;
+  padding: 18px 24px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(15,23,42,0.06);
+
+  border-left: 4px solid #2563eb;
+  transition: 0.25s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 40px rgba(15,23,42,0.1);
+}
+
+/* Project title */
+.project-card h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Status */
+.project-card p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2563eb;
+  text-transform: capitalize;
+}
+
+/* Manage button */
+.project-card a {
+  justify-self: end;
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 700;
+  color: #2563eb;
+
+  padding: 8px 20px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.1);
+
+  transition: 0.25s ease;
+}
+
+.project-card a:hover {
+  background: linear-gradient(90deg, #2563eb, #38bdf8);
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(37,99,235,0.35);
+}
+
+/* =========================================================
+   FIX: MY PROJECTS HORIZONTAL ROW (CSS ONLY)
+========================================================= */
+
+.projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+/* mỗi project = 1 hàng ngang */
+.project-card {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: 4fr 2fr 1fr;
+  align-items: center;
+
+  background: #ffffff;
+  padding: 20px 28px;
+  border-radius: 18px;
+
+  box-shadow: 0 15px 40px rgba(15,23,42,0.06);
+  border-left: 5px solid #2563eb;
+
+  transition: 0.25s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 50px rgba(15,23,42,0.1);
+}
+
+/* Title */
+.project-card h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Status */
+.project-card p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2563eb;
+  justify-self: start;
+}
+
+/* Manage button */
+.project-card a {
+  justify-self: end;
+
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  color: #2563eb;
+
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.12);
+
+  transition: 0.25s ease;
+}
+
+.project-card a:hover {
+  background: linear-gradient(90deg, #2563eb, #38bdf8);
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(37,99,235,0.35);
+}
+
+/* =========================================================
+   FORCE MY PROJECTS FULL WIDTH (ROOT FIX)
+========================================================= */
+
+/* ép container dashboard giãn ngang */
+.mentor-dashboard {
+  width: 100%;
+}
+
+/* ép my projects chiếm full content */
+.projects-list {
+  width: 100%;
+}
+
+/* ép card trải ngang */
+.project-card {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   HARD FIX – FORCE FULL WIDTH (NO JSX CHANGE)
+========================================================= */
+
+/* phá mọi max-width bên trong admin-content */
+.mentor-layout .admin-content * {
+  max-width: none !important;
+}
+
+/* ép dashboard chiếm full hàng */
+.mentor-dashboard {
+  width: 100% !important;
+  display: block !important;
+}
+
+/* ép my projects full chiều ngang */
+.projects-list {
+  width: 100% !important;
+  align-self: stretch !important;
+}
+
+/* ép từng card giãn ngang */
+.project-card {
+  width: 100% !important;
+  display: grid !important;
+  box-sizing: border-box;
+}

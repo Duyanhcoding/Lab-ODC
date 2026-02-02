@@ -1,0 +1,11 @@
+.enterprise-payments {
+  padding: 32px;
+}
+
+.enterprise-payments .info {
+  background: linear-gradient(135deg, #0f766e, #14b8a6);
+  color: white;
+  padding: 24px;
+  border-radius: var(--radius);
+  margin-top: 24px;
+}

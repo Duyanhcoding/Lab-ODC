@@ -3,14 +3,18 @@ import { useNavigate,Link } from "react-router-dom";
 import { Eye, EyeOff} from 'lucide-react';
 import { useAuth } from "../auth/AuthContext";
 import "../styles/login.css";
-import "../styles/theme.css";
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const [showPassword, setShowPassword] =useState(false);
   const [role, setRole] = useState("talent"); // chỉ dùng khi register
+
+  const [fullName, setFullName] = useState("");
+  const [role, setRole] = useState("talent");
+
   const [error, setError] = useState("");
   const [loading,setLoading]=useState(false);
   const [fullName,setFullName]=useState("");
@@ -38,35 +42,60 @@ export default function Login() {
   setLoading(true);
     try {
       if (isLogin) {
+        // LOGIN
         await login(email, password);
+
       } else {
         await register({ email:email, password:password,full_name:fullName, role:role });
       }
+=======
 
-      // 🔥 lấy user từ localStorage (AuthContext đã lưu sẵn)
-      const u = JSON.parse(localStorage.getItem("user")!);
 
-      if (u.role === "admin") {
-        navigate("/admin/dashboard");
-      } else if (u.role === "enterprise") {
-        navigate("/enterprise/dashboard");
-      } else if (u.role === "mentor") {
-        navigate("/mentor/dashboard");
+        const u = JSON.parse(localStorage.getItem("user")!);
+
+        if (u.role === "admin") navigate("/admin/dashboard");
+        else if (u.role === "enterprise") navigate("/enterprise/dashboard");
+        else if (u.role === "mentor") navigate("/mentor/dashboard");
+        else navigate("/talent/dashboard");
+
       } else {
-        navigate("/talent/dashboard");
+        // REGISTER
+        await register({
+          email,
+          password,
+          full_name: fullName,
+          role,
+        });
+
+        alert("Đăng ký thành công! Vui lòng đăng nhập");
+        setIsLogin(true);
+        setPassword("");
       }
     } catch (err: any) {
+
       setError(err.response?.data?.detail || "Authentication failed");
       console.error("Auth error:", err);
     } finally{
       setLoading(false);
+
+      const msg =
+        err.response?.data?.detail ||
+        err.response?.data?.msg ||
+        "Authentication failed";
+
+      setError(typeof msg === "string" ? msg : JSON.stringify(msg));
+
     }
   };
 
   return (
     <div className="login-container">
+
       <div className="login-card">
       <h1>{isLogin ? "LabODC" : "LabODC"}</h1>
+
+      <h1>LabODC</h1>
+
 
       {error && <div className="error-message">{error}</div>}
 
@@ -118,7 +147,13 @@ export default function Login() {
         
         {!isLogin && (
           <>
-           
+            <input
+              type="text"
+              placeholder="Full name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required
+            />
 
             <select value={role} onChange={(e) => setRole(e.target.value)}>
               <option value="talent">Talent</option>

@@ -40,3 +40,4 @@ class FundDistribution(Base):
     transferred_at = Column(DateTime)
 
     payment = relationship("Payment", backref="distributions")
+

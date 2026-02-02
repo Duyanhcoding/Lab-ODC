@@ -1,11 +1,28 @@
-import api from './axios';
+import axios from "axios";
 
 export const authAPI = {
   register: async (data: {
+
+  login: (data: { email: string; password: string }) =>
+    axios.post(
+      "http://localhost:8000/auth/login",
+      new URLSearchParams({
+        username: data.email,
+        password: data.password,
+      }),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    ),
+
+  register: (data: {
     email: string;
     password: string;
     full_name: string;
     role: string;
+
   }) => { console.log('Sending register request with data:', data);
     
     try {
@@ -52,3 +69,7 @@ export const authAPI = {
     return await api.post('/auth/reset-password', data);
   }
 };
+  }) =>
+    axios.post("http://localhost:8000/auth/register", data),
+};
+

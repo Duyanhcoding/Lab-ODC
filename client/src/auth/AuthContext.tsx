@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { authAPI } from "../api/auth";
-import { jwtDecode } from "jwt-decode";
+import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import { authAPI } from '../api/auth';
+import { jwtDecode } from 'jwt-decode';
 
 interface User {
   id: number;
@@ -12,112 +12,121 @@ interface User {
 interface AuthContextType {
   user: User | null;
   token: string | null;
-  loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (data: {
-    email: string;
-    password: string;
-    full_name: string;
-    role: string;
-  }) => Promise<void>;
+  register: (data: RegisterData) => Promise<void>;
   logout: () => void;
-  forgotPassword: (email: string) => Promise<void>;
-  resetPassword: (token: string, password: string) => Promise<void>;
+  loading: boolean;
+}
+
+interface RegisterData {
+  email: string;
+  password: string;
+  full_name: string;
+  role: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // load lại session
+  // Khởi tạo - check localStorage
   useEffect(() => {
-    const t = localStorage.getItem("token");
-    const u = localStorage.getItem("user");
-
-    if (t && u) {
-      setToken(t);
-      setUser(JSON.parse(u));
+    const storedToken = localStorage.getItem('token');
+    const storedUser = localStorage.getItem('user');
+    
+    if (storedToken && storedUser) {
+      try {
+        setToken(storedToken);
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error('Error parsing stored user:', error);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
     }
-
     setLoading(false);
   }, []);
 
-  // LOGIN
   const login = async (email: string, password: string) => {
-    const res = await authAPI.login({ email, password });
-    const { access_token } = res.data;
-
-    const decoded: any = jwtDecode(access_token);
-
-    const userData: User = {
-      id: decoded.id,
-      email: decoded.sub,
-      full_name: decoded.full_name,
-      role: decoded.role,
-    };
-
-    localStorage.setItem("token", access_token);
-    localStorage.setItem("user", JSON.stringify(userData));
-
-    setToken(access_token);
-    setUser(userData);
-  };
-
-  // REGISTER (❗ KHÔNG auto login)
-  const register = async (data: {
-    email: string;
-    password: string;
-    full_name: string;
-    role: string;
-  }) => {
-    await authAPI.register(data);
-  };
-    const forgotPassword = async (email: string) => {
     try {
-      await authAPI.forgotPassword(email);
+      const response = await authAPI.login({ email, password });
+      const { access_token } = response.data;
+      
+      // Decode JWT để lấy thông tin user
+      const decoded: any = jwtDecode(access_token);
+      const userData: User = {
+        id: decoded.id,
+        email: decoded.sub,
+        full_name: decoded.full_name || email,
+        role: decoded.role
+      };
+      
+      // Lưu vào localStorage
+      localStorage.setItem('token', access_token);
+      localStorage.setItem('user', JSON.stringify(userData));
+      
+      setToken(access_token);
+      setUser(userData);
     } catch (error) {
-      console.error('Forgot password error:', error);
+      console.error('Login error:', error);
       throw error;
     }
-    };
+  };
 
-  
-    const resetPassword = async (token: string, newPassword: string) => {
+  const register = async (data: RegisterData) => {
     try {
-      await authAPI.resetPassword({ token, password: newPassword });
+      console.log('AuthContext: Registering with data:', data);
+      
+      const response = await authAPI.register(data);
+      const { access_token } = response.data;
+      
+      console.log('AuthContext: Register successful, token:', access_token);
+      
+      // Decode JWT để lấy thông tin user
+      const decoded: any = jwtDecode(access_token);
+      const userData: User = {
+        id: decoded.id,
+        email: decoded.sub,
+        full_name: decoded.full_name || data.full_name,
+        role: decoded.role || data.role
+      };
+      
+      console.log('AuthContext: User data:', userData);
+      
+      // Lưu vào localStorage
+      localStorage.setItem('token', access_token);
+      localStorage.setItem('user', JSON.stringify(userData));
+      
+      setToken(access_token);
+      setUser(userData);
     } catch (error) {
-      console.error('Reset password error:', error);
+      console.error('Register error:', error);
       throw error;
     }
   };
 
   const logout = () => {
-    localStorage.clear();
-    setUser(null);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setToken(null);
-    window.location.href = "/login";
+    setUser(null);
+    window.location.href = '/login';
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout, forgotPassword,resetPassword }}>
-
-    <AuthContext.Provider
-      value={{ user, token, loading, login, register, logout }}
-    >
-
+    <AuthContext.Provider value={{ user, token, login, register, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
 };
-  
 
 export const useAuth = () => {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used inside AuthProvider");
-  return ctx;
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within AuthProvider');
+  }
+  return context;
 };

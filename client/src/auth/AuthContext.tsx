@@ -21,6 +21,8 @@ interface AuthContextType {
     role: string;
   }) => Promise<void>;
   logout: () => void;
+  forgotPassword: (email: string) => Promise<void>;
+  resetPassword: (token: string, password: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -75,6 +77,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }) => {
     await authAPI.register(data);
   };
+    const forgotPassword = async (email: string) => {
+    try {
+      await authAPI.forgotPassword(email);
+    } catch (error) {
+      console.error('Forgot password error:', error);
+      throw error;
+    }
+    };
+
+  
+    const resetPassword = async (token: string, newPassword: string) => {
+    try {
+      await authAPI.resetPassword({ token, password: newPassword });
+    } catch (error) {
+      console.error('Reset password error:', error);
+      throw error;
+    }
+  };
 
   const logout = () => {
     localStorage.clear();
@@ -84,13 +104,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
+    <AuthContext.Provider value={{ user, token, login, register, logout, forgotPassword,resetPassword }}>
+
     <AuthContext.Provider
       value={{ user, token, loading, login, register, logout }}
     >
+
       {children}
     </AuthContext.Provider>
   );
 };
+  
 
 export const useAuth = () => {
   const ctx = useContext(AuthContext);

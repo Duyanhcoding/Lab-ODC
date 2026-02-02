@@ -1,0 +1,125 @@
+.login-container {
+  min-height: 100vh;
+  background-color: #a8e5f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+/*khung*/
+.login-card {
+  background:rgb(22, 107, 144);
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 25rem;
+  padding: 2rem;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 2;
+  font-weight: 700;
+  color: #0a1327;
+  margin-bottom: 0.5rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction:column;
+  gap: 1.5rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.label-form {
+  display: block;
+  font-size: 15px;
+  color: #c3ccdb;
+  margin-bottom: 0.25cm;
+}
+
+.input-wrapper {
+  position:relative;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid #0e1051;
+  border-radius: 8px;
+  outline-color:#090a68;
+  transition: all 0.2s;
+  padding-left:0.35cm;
+  font-size: 100%;
+  font-family:serif;
+}
+
+.password-input {
+  padding-right: 1.2cm;
+}
+
+.show{
+  position: absolute;
+  right:0.3cm;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor:default;
+  color: #2258b4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.show:hover {
+  color: #9cb2d0;
+}
+
+.show .icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.forgot-link{
+  font-size: 0.875rem;
+  color: #d6d6f2;
+  text-decoration: none;
+}
+
+.forgot-link:hover {
+  color: #0a082c;
+}
+
+.submit{
+  width: 100%;
+  background: #0e3769;
+  color: white;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 16px;
+  font-family:serif;
+}
+
+.submit:hover {
+  background: #8497c5;
+}
+
